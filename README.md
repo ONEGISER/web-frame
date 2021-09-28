@@ -21,3 +21,7 @@
 ### 发布
 
 `npm run release`
+
+# 参考
+
+[webpack](http://webpack.github.io/)
