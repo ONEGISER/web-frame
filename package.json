@@ -1,0 +1,42 @@
+{
+  "name": "web-frame",
+  "version": "0.1.0",
+  "description": "web-frame",
+  "main": "dist/web-frame.js",
+  "scripts": {
+    "taobao": "npm install --registry https://registry.npm.taobao.org",
+    "build": "node node_modules/webpack/bin/webpack.js --config  ./conf/webpack.config.js --mode=production",
+    "release": "node node_modules/webpack/bin/webpack.js --config  ./conf/webpack.config.release.js",
+    "webpack": "node node_modules/webpack/bin/webpack.js --config  ./conf/webpack.config.js --mode=development",
+    "start": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --config   ./conf/webpack.config.js --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ONEGISER/web-frame.git"
+  },
+  "dependencies": {
+  },
+  "keywords": [
+    "html",
+    "js",
+    "css",
+    "webpack5"
+  ],
+  "author": "ONEGISER",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ONEGISER/web-frame/issues"
+  },
+  "homepage": "https://github.com/ONEGISER/web-frame/issues#README",
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "babel-loader": "^8.2.2",
+    "mini-css-extract-plugin": "^2.3.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.3.0",
+    "html-webpack-plugin": "^5.3.2",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.2.1"
+  }
+}
