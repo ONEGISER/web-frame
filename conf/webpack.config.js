@@ -6,6 +6,7 @@ module.exports = (env, argv) => {
     const { mode } = argv
     const isDev = mode === "development"
     const rootPath = "../build";
+    const publicPath="../public";
     const prodPlugins = [
         new CleanWebpackPlugin(),
     ]
@@ -35,7 +36,7 @@ module.exports = (env, argv) => {
         },
         devServer: {
             static: {
-                directory: path.join(__dirname, rootPath),
+                directory: path.join(__dirname, publicPath),
             },
             compress: true,
             port: 9000,
