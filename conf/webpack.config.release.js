@@ -13,10 +13,11 @@ module.exports = {
     mode: "production",
     entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, rootPath),
         filename: `${pkg.name}.js`,
+        library: `Welcome`,
+        path: path.resolve(__dirname, rootPath),
+        libraryExport: "default",
         chunkFilename: '[name].[chunkhash].js',
-        library: `${pkg.name}`,
         libraryTarget: "umd"
     },
     resolve: {
