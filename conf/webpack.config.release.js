@@ -16,7 +16,7 @@ module.exports = {
         filename: `${pkg.name}.js`,
         library: `Welcome`,
         path: path.resolve(__dirname, rootPath),
-        libraryExport: "default",
+        // libraryExport: "default",
         chunkFilename: '[name].[chunkhash].js',
         libraryTarget: "umd"
     },

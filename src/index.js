@@ -1,6 +1,3 @@
-import "./style/index.css";
-const welcome = function (str) {
-    document.getElementById("root").innerHTML = str ? str : "欢迎使用js框架！"
-}
+export { Map } from "./map"
+export { Point } from "./point"
 
-export default welcome

@@ -15,6 +15,7 @@
     "url": "git+https://github.com/ONEGISER/web-frame.git"
   },
   "dependencies": {
+    "@arcgis/core": "^4.21.2"
   },
   "keywords": [
     "html",
