@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <link href="/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script type="text/javascript" src="/Cesium/Cesium.js"></script>
+    <script src="/config.js"></script>
+    <title>popup</title>
+</head>
+
+<body style="margin: 0px;width:100%;height:100%;">
+    <div id="cesiumContainer" style="width:100%;height:100%;position:absolute;"></div>
+</body>
+<style>
+    .self-define-popup {
+        position: absolute;
+        left: 400px;
+        top: 600px;
+        min-width: 386px;
+        max-width: 400px;
+        max-height: 340px;
+        min-height: 250px;
+        padding: 10px 20px;
+        background-color: #fff;
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, .3);
+        z-index: 100;
+    }
+
+    .self-define-popup:after {
+        display: inline-block;
+        position: absolute;
+        bottom: -13px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border: 5px solid transparent;
+        border-top: 8px solid #fff;
+        content: "";
+    }
+
+    .self-define-popup-close-button {
+        font-size: 24px;
+        position: absolute;
+        background: #fff;
+        padding: 0 6px;
+        box-sizing: border-box;
+        cursor: pointer;
+        z-index: 101;
+        transition: color .3s;
+        top: 0;
+        right: 0;
+        border-radius: 2px;
+        width: 30px;
+        height: 30px;
+        color: #5d5d5d;
+        background-color: transparent;
+        border: 0;
+    }
+
+    .self-define-popup-close-button:hover {
+        color: #1890ff;
+    }
+</style>
+<script>
+    //created by onegiser at 2021-09-15
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+        imageryProviderViewModels: [
+            new Cesium.ProviderViewModel({
+                name: "天地图影像",
+                iconUrl: "/imgs/map/tdt_img.jpg",
+                creationFunction: () => {
+                    const imgImageryProvider = new Cesium.WebMapTileServiceImageryProvider({
+                        url: "http://t{s}.tianditu.com/img_c/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=c&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=" + key,
+                        subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+                        tilingScheme: new Cesium.GeographicTilingScheme(),
+                        tileMatrixLabels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"]
+                    })
+                    return [imgImageryProvider]
+                }
+            })
+        ]
+    })
+    console.log(viewer.container);
+    const addPopUpDom = (viewer) => {
+        const container = viewer.container
+        const popupContainer = document.createElement("div")
+        const html = '<div class="self-define-popup">' +
+            '<div class="self-define-popup-close-button">×</div>' +
+            '</div>'
+        popupContainer.innerHTML = html
+        container.appendChild(popupContainer)
+    }
+    addPopUpDom(viewer)
+</script>
+
+</html>
