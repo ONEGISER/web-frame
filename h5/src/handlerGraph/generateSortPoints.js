@@ -14,14 +14,14 @@ for (let i in lines) {
         const bData = line[b - 1]
         const cData = line[c - 1]
         const dData = line[d - 1]
-        const axp = Number(aData.x)
-        const ayp = Number(aData.y)
-        const bxp = Number(bData.x)
-        const byp = Number(bData.y)
-        const cxp = Number(cData.x)
-        const cyp = Number(cData.y)
-        const dxp = Number(dData.x)
-        const dyp = Number(dData.y)
+        const axp = Number(aData.s)
+        const ayp = Number(aData.e)
+        const bxp = Number(bData.s)
+        const byp = Number(bData.e)
+        const cxp = Number(cData.s)
+        const cyp = Number(cData.e)
+        const dxp = Number(dData.s)
+        const dyp = Number(dData.e)
         const datas = [points[axp], points[ayp], points[bxp], points[byp], points[cxp], points[cyp], points[dxp], points[dyp]]
 
         const coordinates = []

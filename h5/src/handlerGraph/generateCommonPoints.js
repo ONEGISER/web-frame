@@ -4,8 +4,8 @@ const features = []
 for (let i in line) {
     const data = line[i]
     if (data) {
-        const fp = Number(data.x)
-        const lp = Number(data.y)
+        const fp = Number(data.s)
+        const lp = Number(data.e)
         const fpData = points[fp]
         const lpData = points[lp]
 
