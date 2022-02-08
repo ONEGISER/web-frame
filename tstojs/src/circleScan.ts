@@ -1,48 +1,48 @@
-import { Viewer } from "cesium";
+import { Cartesian3, Cartesian4, Cartographic, Matrix4, PostProcessStage, Viewer } from "cesium";
 import { ScanOption } from "./radarScan";
 export class CircleScan {
     viewer: Viewer
     constructor(viewer: Viewer) {
         this.viewer = viewer
     }
-    getPostStage( options: ScanOption) {
+    getPostStage(options: ScanOption) {
         const { viewer } = this
         const { radius, color, duration, point } = options
         if (!point) {
             console.log("请检查参数")
             return
         }
-        var cartographicCenter = Cesium.Cartographic.fromDegrees(point.longitude, point.latitude, point.height);
-        var _Cartesian3Center = Cesium.Cartographic.toCartesian(cartographicCenter);
-        var _Cartesian4Center = new Cesium.Cartesian4(_Cartesian3Center.x, _Cartesian3Center.y, _Cartesian3Center.z, 1);
+        var cartographicCenter = Cartographic.fromDegrees(point.longitude, point.latitude, point.height);
+        var _Cartesian3Center = Cartographic.toCartesian(cartographicCenter);
+        var _Cartesian4Center = new Cartesian4(_Cartesian3Center.x, _Cartesian3Center.y, _Cartesian3Center.z, 1);
 
-        var _CartograhpicCenter1 = new Cesium.Cartographic(cartographicCenter.longitude, cartographicCenter.latitude, cartographicCenter.height + 500);
-        var _Cartesian3Center1 = Cesium.Cartographic.toCartesian(_CartograhpicCenter1);
-        var _Cartesian4Center1 = new Cesium.Cartesian4(_Cartesian3Center1.x, _Cartesian3Center1.y, _Cartesian3Center1.z, 1);
+        var _CartograhpicCenter1 = new Cartographic(cartographicCenter.longitude, cartographicCenter.latitude, cartographicCenter.height + 500);
+        var _Cartesian3Center1 = Cartographic.toCartesian(_CartograhpicCenter1);
+        var _Cartesian4Center1 = new Cartesian4(_Cartesian3Center1.x, _Cartesian3Center1.y, _Cartesian3Center1.z, 1);
 
         var _time = (new Date()).getTime();
 
-        var _scratchCartesian4Center = new Cesium.Cartesian4();
-        var _scratchCartesian4Center1 = new Cesium.Cartesian4();
-        var _scratchCartesian3Normal = new Cesium.Cartesian3();
+        var _scratchCartesian4Center = new Cartesian4();
+        var _scratchCartesian4Center1 = new Cartesian4();
+        var _scratchCartesian3Normal = new Cartesian3();
 
         const camera: any = viewer.camera
-        var ScanPostStage = new Cesium.PostProcessStage({
+        var ScanPostStage = new PostProcessStage({
             fragmentShader: this.getCircleScanSegmentShader(),
             uniforms: {
                 u_scanCenterEC: function () {
-                    var temp = Cesium.Matrix4.multiplyByVector(camera._viewMatrix, _Cartesian4Center, _scratchCartesian4Center);
+                    var temp = Matrix4.multiplyByVector(camera._viewMatrix, _Cartesian4Center, _scratchCartesian4Center);
                     return temp;
                 },
                 u_scanPlaneNormalEC: function () {
-                    var temp = Cesium.Matrix4.multiplyByVector(camera._viewMatrix, _Cartesian4Center, _scratchCartesian4Center);
-                    var temp1 = Cesium.Matrix4.multiplyByVector(camera._viewMatrix, _Cartesian4Center1, _scratchCartesian4Center1);
+                    var temp = Matrix4.multiplyByVector(camera._viewMatrix, _Cartesian4Center, _scratchCartesian4Center);
+                    var temp1 = Matrix4.multiplyByVector(camera._viewMatrix, _Cartesian4Center1, _scratchCartesian4Center1);
 
                     _scratchCartesian3Normal.x = temp1.x - temp.x;
                     _scratchCartesian3Normal.y = temp1.y - temp.y;
                     _scratchCartesian3Normal.z = temp1.z - temp.z;
 
-                    Cesium.Cartesian3.normalize(_scratchCartesian3Normal, _scratchCartesian3Normal);
+                    Cartesian3.normalize(_scratchCartesian3Normal, _scratchCartesian3Normal);
 
                     return _scratchCartesian3Normal;
                 },
