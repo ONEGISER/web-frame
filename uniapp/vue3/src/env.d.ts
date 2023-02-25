@@ -6,3 +6,6 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare var  CesiumNavigation:any
+declare var Cesium:any
