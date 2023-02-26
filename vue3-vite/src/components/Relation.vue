@@ -1,7 +1,7 @@
 <template>
     <a-row>
         <span>名称: </span>
-        <a-auto-complete style="width:200px" w-model:value="data.name" :options="nameOptions" />
+        <a-auto-complete style="width:200px" v-model:value="data.name" :options="nameOptions" />
         <span>编号: </span>
     </a-row>
 </template>
@@ -26,16 +26,16 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     datas: () => [{
         name: "张三",
-        code: "1234"
+        code: "1"
     }, {
         name: "李四",
-        code: "1234"
+        code: "2"
     }],
 })
 
 const { datas } = toRefs(props);
 
-const data = reactive({ code: "", name: "" })
+const data = reactive({ code: "2", name: "李四" })
 
 const nameOptions = ref<OptionData[]>([])
 const codeOptions = ref<OptionData[]>([])
