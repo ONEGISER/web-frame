@@ -149,7 +149,10 @@ const getDataSource = (datas: any) => {
         temp[secondColName] = i
         obj[i].unshift(temp)
         results = results.concat(obj[i])
+        
     }
+    console.log(results);
+
     return results
 }
 const dataSource = getDataSource(data)
