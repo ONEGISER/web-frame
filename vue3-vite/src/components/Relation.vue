@@ -6,11 +6,12 @@
         <span>编号: </span>
         <a-auto-complete style="width:200px" v-model:value="data.code" :options="codeOptions"
             @search="onSearch('code', $event)" @select="onSelect('code', $event)" />
+        <a-button @click="onClick">提交</a-button>
     </a-row>
 </template>
         
 <script setup lang="ts">
-import { reactive, defineProps, toRefs, ref, } from "vue"
+import { reactive, defineProps, toRefs, ref, defineEmits } from "vue"
 
 interface OptionData {
     value?: string
@@ -18,7 +19,7 @@ interface OptionData {
 
 type SearchType = "name" | "code" | "all"
 
-interface Data {
+export interface Data {
     name?: string
     code?: string
 }
@@ -27,6 +28,12 @@ interface Props {
     datas: Data[]
     default: any
 }
+
+interface Emits {
+    (e: 'click', data: Data): void
+}
+const emit = defineEmits<Emits>()
+
 
 const props = withDefaults(defineProps<Props>(), {
     datas: () => [{
@@ -45,6 +52,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { datas } = toRefs(props);
+
 
 const data = reactive({ code: "", name: "" })
 
@@ -110,5 +118,9 @@ const onSelect = (type: SearchType, value: string) => {
             data.name = name
         }
     }
+}
+
+const onClick = () => {
+    emit('click', data)
 }
 </script>
