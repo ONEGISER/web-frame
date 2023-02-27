@@ -1,8 +1,11 @@
 <template>
     <a-row>
         <span>名称: </span>
-        <a-auto-complete style="width:200px" v-model:value="data.name" :options="nameOptions" @search="onSearch" />
+        <a-auto-complete style="width:200px" v-model:value="data.name" :options="nameOptions"
+            @search="onSearch('name', $event)" @select="onSelect('name', $event)" />
         <span>编号: </span>
+        <a-auto-complete style="width:200px" v-model:value="data.code" :options="codeOptions"
+            @search="onSearch('code', $event)" @select="onSelect('code', $event)" />
     </a-row>
 </template>
         
@@ -12,6 +15,8 @@ import { reactive, defineProps, toRefs, ref, } from "vue"
 interface OptionData {
     value?: string
 }
+
+type SearchType = "name" | "code" | "all"
 
 interface Data {
     name?: string
@@ -30,36 +35,80 @@ const props = withDefaults(defineProps<Props>(), {
     }, {
         name: "李四",
         code: "2"
+    }, {
+        name: "李三",
+        code: "3"
+    }, {
+        name: "王麻子",
+        code: "4"
     }],
 })
 
 const { datas } = toRefs(props);
 
-const data = reactive({ code: "2", name: "李四" })
+const data = reactive({ code: "", name: "" })
 
 const nameOptions = ref<OptionData[]>([])
 const codeOptions = ref<OptionData[]>([])
 
 
-const getOptions = (datas: Data[],searchText:string) => {
+const getOptions = (datas: Data[], type: SearchType, searchText: string) => {
     const _codeOptions: OptionData[] = []
     const _nameOptions: OptionData[] = []
     for (let i in datas) {
         const data = datas[i]
         if (data) {
-            _codeOptions.push({ value: data.code })
-            _nameOptions.push({ value: data.name })
+            if (type === "all") {
+                _codeOptions.push({ value: data.code })
+                _nameOptions.push({ value: data.name })
+            } else if (type === "name") {
+                const { name } = data
+                if (name && name.indexOf(searchText) > -1) {
+                    _nameOptions.push({ value: data.name })
+                }
+            } else if (type === "code") {
+                const { code } = data
+                if (code && code.indexOf(searchText) > -1) {
+                    _codeOptions.push({ value: data.code })
+                }
+            }
         }
-        nameOptions.value = _nameOptions
-        codeOptions.value = _codeOptions
+        if (!searchText) {
+            nameOptions.value = []
+            codeOptions.value = []
+        } else {
+            nameOptions.value = _nameOptions
+            codeOptions.value = _codeOptions
+        }
     }
 }
-// getOptions(props.datas,'')
 
 
-const onSearch = (searchText: string) => {
+const onSearch = (type: SearchType, searchText: string) => {
     console.log(searchText);
 
+    getOptions(props.datas, type, searchText)
+}
 
+const onSelect = (type: SearchType, value: string) => {
+    if (type === "name") {
+        data.name = value
+        //查找对应的编码值
+        const code = datas.value.find((data) => {
+            return data.name === value
+        })?.code
+        if (code) {
+            data.code = code
+        }
+    } else if (type === "code") {
+        data.code = value
+        //查找对应的编名称值
+        const name = datas.value.find((data) => {
+            return data.code === value
+        })?.name
+        if (name) {
+            data.name = name
+        }
+    }
 }
 </script>
