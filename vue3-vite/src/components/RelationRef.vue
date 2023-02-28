@@ -54,7 +54,7 @@ const props = withDefaults(defineProps<Props>(), {
 const { datas, value } = toRefs(props);
 
 
-const data = reactive(value)
+const data = ref(value)
 
 const nameOptions = ref<OptionData[]>([])
 const codeOptions = ref<OptionData[]>([])
