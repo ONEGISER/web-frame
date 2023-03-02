@@ -12,17 +12,13 @@
         
 <script setup lang="ts">
 import { reactive, defineProps, toRefs, ref, defineEmits } from "vue"
+import { Data } from "./interface";
 
 interface OptionData {
     value?: string
 }
 
 type SearchType = "name" | "code" | "all"
-
-export interface Data {
-    name?: string
-    code?: string
-}
 
 interface Props {
     datas: Data[]

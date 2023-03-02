@@ -7,6 +7,7 @@
         <a-auto-complete style="width:200px" v-model:value="data.code" :options="codeOptions"
             @search="onSearch('code', $event)" @select="onSelect('code', $event)" />
         <a-button @click="onClick">提交</a-button>
+       
     </a-row>
 </template>
         
@@ -33,6 +34,7 @@ interface Emits {
     (e: 'click', data: Data): void
 }
 const emit = defineEmits<Emits>()
+
 
 
 const props = withDefaults(defineProps<Props>(), {

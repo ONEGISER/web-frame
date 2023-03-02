@@ -5,11 +5,13 @@
 
     ref:
     <!-- <RelationRef @click="click" :value="value" /> -->
+    <input accept=".pdf" @change="onChange" type="file"/>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import Relation, { Data } from "./Relation.vue"
+import { Data } from "./interface";
+import Relation from "./Relation.vue"
 // import RelationRef from "./RelationRef.vue"
 
 
@@ -26,5 +28,10 @@ setTimeout(() => {
 }, 3000)
 const click = (datas: Data) => {
     console.log(datas);
+}
+
+const onChange=(e:any)=>{
+    console.log(e);
+    
 }
 </script>
