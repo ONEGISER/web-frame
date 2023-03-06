@@ -1,4 +1,4 @@
-import HelloWorld from "@/components/HelloWorld.vue";
+import HelloWorld from "/@/components/HelloWorld.vue";
 import Table from "./components/Table.vue";
 import Table2 from "./components/Table2.vue";
 import RelationP from "./components/RelationP.vue";
