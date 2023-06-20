@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+    />
+    <title>地形影像</title>
+    <!-- <link href="/libs/SuperMapCesium/Widgets/widgets.css" rel="stylesheet" />
+    <script
+      type="text/javascript"
+      src="/libs/SuperMapCesium/Cesium.js"
+    ></script> -->
+
+    <link href="/libs/Cesium/Widgets/widgets.css" rel="stylesheet" />
+    <script type="text/javascript" src="/libs/Cesium/Cesium.js"></script>
+  </head>
+
+  <body>
+    <div id="cesiumContainer"></div>
+
+    <script>
+      var viewer = new Cesium.Viewer("cesiumContainer", {
+        // terrainProvider: new Cesium.CesiumTerrainProvider({
+        //   url: "http://data.mars3d.cn/terrain",
+        //   isSct: false,
+        // }),
+      });
+      //添加SuperMap iServer发布的影像服务
+      var layer = viewer.imageryLayers.addImageryProvider(
+        // new Cesium.SuperMapImageryProvider({
+        //   url: "http://www.supermapol.com/realspace/services/3D-dixingyingxiang/rest/realspace/datas/MosaicResult",
+        // })
+        new Cesium.WebMapTileServiceImageryProvider({
+          //影像底图
+          url:
+            "http://t{s}.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=" +
+            "4267820f43926eaf808d61dc07269beb",
+          subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
+          layer: "tdtImgLayer",
+          style: "default",
+          format: "image/jpeg",
+          tileMatrixSetID: "GoogleMapsCompatible", //使用谷歌的瓦片切片方式
+          show: true,
+        })
+      );
+
+      const addPri = async (viewer) => {
+        let color = Cesium.Color.fromCssColorString("#092448").withAlpha(1);
+        const geojsonUrl = "/datas/data4326.geojson";
+        const datasource = await Cesium.GeoJsonDataSource.load(geojsonUrl, {
+          fill: color,
+          clampToGround: true,
+        });
+
+        const geometryInstances = [];
+        const geometryInstances2 = [];
+
+        if (datasource?.entities?.values) {
+          const { values } = datasource.entities;
+          values.map((data) => {
+            if (data.properties) {
+              const properties = data.properties.getValue(
+                new Cesium.JulianDate()
+              );
+              if (properties.I > 50) {
+                color = Cesium.Color.fromCssColorString("#092448").withAlpha(1);
+              } else {
+                color = Cesium.Color.RED.withAlpha(1);
+              }
+            }
+            if (data.polygon) {
+              const { hierarchy } = data.polygon;
+              if (hierarchy) {
+                const result = hierarchy.getValue(new Cesium.JulianDate());
+                const g = new Cesium.GeometryInstance({
+                  geometry: new Cesium.PolygonGeometry({
+                    polygonHierarchy: {
+                      positions: result.positions,
+                      holes: result.holes,
+                    },
+                  }),
+                  attributes: {
+                    color:
+                      Cesium.ColorGeometryInstanceAttribute.fromColor(color),
+                  },
+                });
+                geometryInstances.push(g);
+
+                const p = new Cesium.GeometryInstance({
+                  geometry: new Cesium.PolylineGeometry({
+                    positions: result.positions,
+                    loop: false,
+                    width: 1,
+                  }),
+                  attributes: {
+                    color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+                      Cesium.Color.WHITE
+                    ),
+                  },
+                });
+
+                geometryInstances2.push(p);
+              }
+            }
+          });
+        }
+        const result = viewer.scene.primitives.add(
+          new Cesium.GroundPrimitive({
+            geometryInstances,
+            show: true,
+          })
+        );
+
+        viewer.scene.primitives.add(
+          new Cesium.Primitive({
+            geometryInstances: geometryInstances2,
+            show: true,
+            appearance: new Cesium.PolylineColorAppearance(),
+          })
+        );
+
+        setTimeout(async () => {
+          // primitive.appearance.material.uniforms.color
+          console.log(result);
+        }, 10000);
+      };
+      //   addPri(viewer);
+
+      const addJson = async (viewer) => {
+        let color = Cesium.Color.fromCssColorString("#092448").withAlpha(1);
+        const geojsonUrl = "/datas/data4326.geojson";
+        const datasource = await Cesium.GeoJsonDataSource.load(geojsonUrl, {
+          fill: color,
+          stroke: Cesium.Color.WHITE,
+          strokeWidth: 1,
+        });
+        viewer.dataSources.add(datasource);
+        if (datasource?.entities?.values) {
+          const { values } = datasource.entities;
+          values.map((data, i) => {
+            if (data.properties) {
+              const properties = data.properties.getValue(
+                new Cesium.JulianDate()
+              );
+              if (properties.I > 50) {
+                color = Cesium.Color.fromCssColorString("#092448").withAlpha(1);
+              } else {
+                color = Cesium.Color.RED.withAlpha(1);
+              }
+              //   data.polygon.material.color = color;
+            }
+          });
+        }
+      };
+
+      addPri(viewer);
+
+      var entity = new Cesium.Entity({
+        name: "test",
+        show: true,
+        position: Cesium.Cartesian3.fromDegrees(121.86147, 46.93702, 10000),
+        point: new Cesium.PointGraphics({
+          color: new Cesium.ConstantProperty(Cesium.Color.RED),
+        }),
+      });
+      viewer.entities.add(entity);
+      viewer.zoomTo(entity);
+    </script>
+  </body>
+</html>
