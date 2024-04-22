@@ -1448,7 +1448,7 @@
     "function-bind" "^1.1.1"
     "get-intrinsic" "^1.0.2"
 
-"cesium@^1.105.2", "cesium@^1.95.0":
+"cesium@^1.95.0", "cesium@1.105.2":
   "integrity" "sha512-iX4YpOuF4qgce2iHrimMs3Yi0TY+qWiIWoeM7GZyy8fo0zubzqPd/sadr37bEtKhzOFn+JaP5nodxNUJ5exRWQ=="
   "resolved" "https://registry.npmjs.org/cesium/-/cesium-1.105.2.tgz"
   "version" "1.105.2"
